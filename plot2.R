@@ -1,5 +1,5 @@
 #
-# This file is for plot 1 for Expolitory Data Analysis Project 1
+# This file is for plot 2 for Expolitory Data Analysis Project 1
 #
 ###############################################################################
 
@@ -10,7 +10,7 @@
 
 readfile <- paste(getwd(),"/explore_p_1", "/", "household_power_consumption.txt",
                  sep="")
-writefile <- paste(getwd(),"/explore_p_1", "/", "plot1.png", sep="")
+writefile <- paste(getwd(),"/explore_p_1", "/", "plot2.png", sep="")
 
 # Read the file
 power.df <- as.data.frame(read.table(readfile, header=TRUE, sep=";",
@@ -22,12 +22,16 @@ power.df <- as.data.frame(read.table(readfile, header=TRUE, sep=";",
 #subset the data frame to innclude only the dates of interest
 power.df <- subset(power.df, Date == "1/2/2007" | Date == "2/2/2007")
 
+# Merge Date & Time into one filed and change the class 
+power.df$DateTime <- paste(power.df$Date, power.df$Time, sep=" ")
+power.df$DateTime <- strptime(power.df$DateTime, format="%d/%m/%Y %H:%M:%S")
 
-# Step 3 Generate the histogram
+
+# Step 3 Generate the line graph
 ###############################################################################
 
 png(filename = writefile, width = 480, height = 480, units = "px", bg = "white")
 par(mar = c(6, 6, 5, 4))
-hist(power.df$Global_active_power, col = "red", main = "Global Active Power",
-     xlab = "Global Active Power(kilowatts)")
+plot(power.df$DateTime, power.df$Global_active_power, type="l", 
+     xlab="", ylab="Global Active Power (kilowatts)")
 dev.off()
